@@ -83,14 +83,14 @@ npm run start:dev
 
 ## API Endpoints
 
-GET /books: Get all books
-GET /books/:id: Get a specific book
-POST /books: Create a new book
-PUT /books/:id: Update a book
-DELETE /books/:id: Delete a book
-GET /books/stream-large-file: Stream a large file
-GET /books/heavy-computation: Perform a heavy computation
-GET /books/long-operation: Perform a long-running operation
+`GET /books`: Get all books
+`GET /books/:id`: Get a specific book
+`POST /books`: Create a new book
+`PUT /books/:id`: Update a book
+`DELETE /books/:id`: Delete a book
+`GET /books/stream-large-file`: Stream a large file
+`GET /books/heavy-computation`: Perform a heavy computation
+`GET /books/long-operation`: Perform a long-running operation
 
 For detailed API documentation, visit http://localhost:3000/api after starting the server.
 

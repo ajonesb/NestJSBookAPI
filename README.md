@@ -176,6 +176,11 @@ async getBook(@Param('id') id: string) {
 
 Swagger UI is available at http://localhost:3000/api. This provides interactive API documentation and allows you to test the API directly from the browser.
 
+![image](https://github.com/user-attachments/assets/8e2418e7-987f-4916-a104-5cf508f3b1a9)
+
+
+
+
 ## Testing
 
 To run the tests:
@@ -190,13 +195,22 @@ To test the API manually, you can use tools like Postman or curl. Here are some 
 
 curl http://localhost:3000/books
 
+![image](https://github.com/user-attachments/assets/1fd5f743-7ed8-406a-9854-ae989cd26243)
+
+
 ## Add a new book
 
 curl -X POST -H "Content-Type: application/json" -d '{"title":"New Book","author":"Author Name"}' http://localhost:3000/books
 
+![image](https://github.com/user-attachments/assets/3cf4f57e-fb6e-496f-bfb8-cd3c0b087855)
+
+
 ## Get a specific book (replace 1 with an actual book id)
 
 curl http://localhost:3000/books/1
+
+![image](https://github.com/user-attachments/assets/8e4d4355-89ec-45a7-9a07-d0d5d86c26bd)
+
 
 ## Update a book (replace 1 with an actual book id)
 
@@ -206,17 +220,29 @@ curl -X PUT -H "Content-Type: application/json" -d '{"title":"Updated Title"}' h
 
 curl -X DELETE http://localhost:3000/books/1
 
+![image](https://github.com/user-attachments/assets/ce95016a-0714-44bd-9eaf-2c3aef4511b2)
+
+
 ## Perform long operation
 
 curl http://localhost:3000/books/long-operation
+
+![image](https://github.com/user-attachments/assets/71fb92af-b73d-4cfc-99bc-63a7f4b728cf)
+
 
 ## Perform heavy computation
 
 curl http://localhost:3000/books/heavy-computation
 
+![image](https://github.com/user-attachments/assets/5e24462d-aaeb-4fdc-8b03-65472cf7b1c0)
+
+
 ## Stream large file
 
 curl -OJ http://localhost:3000/books/stream-large-file
+
+![image](https://github.com/user-attachments/assets/a4a9406e-4a0c-404c-83d6-3c993a7f89eb)
+
 
 Remember to replace localhost:3000 with your server's address if deploying to a different environment.
 

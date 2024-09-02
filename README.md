@@ -186,35 +186,35 @@ For e2e tests:
 
 To test the API manually, you can use tools like Postman or curl. Here are some example curl commands:
 
-# Get all books
+## Get all books
 
 curl http://localhost:3000/books
 
-# Add a new book
+## Add a new book
 
 curl -X POST -H "Content-Type: application/json" -d '{"title":"New Book","author":"Author Name"}' http://localhost:3000/books
 
-# Get a specific book (replace 1 with an actual book id)
+## Get a specific book (replace 1 with an actual book id)
 
 curl http://localhost:3000/books/1
 
-# Update a book (replace 1 with an actual book id)
+## Update a book (replace 1 with an actual book id)
 
 curl -X PUT -H "Content-Type: application/json" -d '{"title":"Updated Title"}' http://localhost:3000/books/1
 
-# Delete a book (replace 1 with an actual book id)
+## Delete a book (replace 1 with an actual book id)
 
 curl -X DELETE http://localhost:3000/books/1
 
-# Perform long operation
+## Perform long operation
 
 curl http://localhost:3000/books/long-operation
 
-# Perform heavy computation
+## Perform heavy computation
 
 curl http://localhost:3000/books/heavy-computation
 
-# Stream large file
+## Stream large file
 
 curl -OJ http://localhost:3000/books/stream-large-file
 

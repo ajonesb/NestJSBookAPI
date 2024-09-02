@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Book } from './book.model';
 import * as fs from 'fs/promises';
 import * as path from 'path';
@@ -31,7 +31,11 @@ export class BooksService {
   }
   async getBook(id: number): Promise<Book> {
     const books = await this.getAllBooks();
-    return books.find((book) => book.id === id);
+    const book = books.find((b) => b.id === id);
+    if (!book) {
+      throw new NotFoundException(`Book with id ${id} not found`);
+    }
+    return book;
   }
 
   async updateBook(id: number, bookData: Partial<Book>): Promise<Book> {
@@ -78,5 +82,10 @@ export class BooksService {
       }
     }
     await fs.writeFile(this.booksFile, JSON.stringify(books, null, 2));
+  }
+
+  async logOperation(operation: string): Promise<void> {
+    const logFile = path.join(__dirname, '..', '..', 'data', 'operations.log');
+    await fs.appendFile(logFile, `${new Date().toISOString()}: ${operation}\n`);
   }
 }

@@ -7,16 +7,48 @@ import {
   Body,
   Param,
   NotFoundException,
-  Query,
+  Res,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { BooksService } from './books.service';
 import { Book } from './book.model';
+import { createReadStream } from 'fs';
+import { join } from 'path';
 import { fork } from 'child_process';
-import * as path from 'path';
+import { Response } from 'express';
 
 @Controller('books')
 export class BooksController {
   constructor(private readonly booksService: BooksService) {}
+
+  @Get('stream-large-file')
+  streamFile(@Res() res: Response) {
+    console.log('Streaming file...');
+    const file = createReadStream(join(process.cwd(), 'largefile.txt'));
+    res.set({
+      'Content-Type': 'text/plain',
+      'Content-Disposition': 'attachment; filename="largefile.txt"',
+    });
+    file.pipe(res);
+  }
+
+  @Get('heavy-computation')
+  async heavyComputation(): Promise<number> {
+    return new Promise((resolve, reject) => {
+      const child = fork('./heavy-computation.js');
+      child.send('start');
+      child.on('message', resolve);
+      child.on('error', reject);
+    });
+  }
+
+  @Get('long-operation')
+  async longOperation(): Promise<string> {
+    console.log('Starting long operation');
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    console.log('Long operation finished');
+    return 'Long operation completed';
+  }
 
   @Get()
   async getAllBooks(): Promise<Book[]> {
@@ -24,17 +56,22 @@ export class BooksController {
   }
 
   @Get(':id')
-  async getBook(@Param('id') id: string): Promise<Book> {
-    const book = await this.booksService.getBook(Number(id));
-    if (!book) {
-      throw new NotFoundException('Book not found');
+  async getBook(@Param('id') id: string) {
+    try {
+      return await this.booksService.getBook(Number(id));
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw error;
+      }
+      throw new InternalServerErrorException('Something went wrong');
     }
-    return book;
   }
 
   @Post()
   async addBook(@Body() bookData: Omit<Book, 'id'>): Promise<Book> {
-    return this.booksService.addBook(bookData);
+    const newBook = await this.booksService.addBook(bookData);
+    await this.booksService.logOperation(`Added book: ${newBook.title}`);
+    return newBook;
   }
 
   @Put(':id')
@@ -58,18 +95,5 @@ export class BooksController {
     if (!deleted) {
       throw new NotFoundException('Book not found');
     }
-  }
-
-  @Get('heavy-computation')
-  async performHeavyComputation(
-    @Query('duration') durationQuery: string,
-  ): Promise<string> {
-    const duration = parseInt(durationQuery) || 5000;
-    return new Promise((resolve, reject) => {
-      const child = fork(path.join(__dirname, 'heavy-computation.worker.js'));
-      child.send(duration);
-      child.on('message', resolve);
-      child.on('error', reject);
-    });
   }
 }
